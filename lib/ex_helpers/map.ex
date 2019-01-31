@@ -31,7 +31,16 @@ defmodule ExHelpers.Map do
   """
   def map_keys_to_s(map) do
     for {key, val} <- map, into: %{} do
-      {to_string(key), (if is_map(val), do: map_keys_to_s(val), else: val)}
+      val = cond do
+        # the problem: date is also map inside, but it can't be enumerated. TODO: can we do it with defguard or something like?
+        is_map(val) -> try do
+                         map_keys_to_s(val)
+                       rescue
+                         _ -> val
+                       end
+        true -> val
+      end
+      {to_string(key), val}
     end
   end
 

@@ -4,7 +4,7 @@ defmodule ExHelpers.MixProject do
   def project do
     [
       app: :ex_helpers,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: ">= 1.3.0",
       start_permanent: Mix.env() == :prod,
       deps: deps()

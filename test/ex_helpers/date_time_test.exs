@@ -26,5 +26,8 @@ defmodule DateTimeTest do
       assert to_date("2018-11-11", ["{YYYY}{M}{D}{h24}{m}:{s}", "{YYYY}-{M}-{D}"]) == ~D[2018-11-11]
       assert to_date(nil, ["{YYYY}{M}{D}{h24}{m}:{s}"]) == nil
     end
+    test "should return itself when argument is date already" do
+      assert to_date(~D[2018-01-01]) == ~D[2018-01-01]
+    end
   end
 end

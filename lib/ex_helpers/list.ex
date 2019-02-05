@@ -123,6 +123,9 @@ defmodule ExHelpers.List do
   defp to_flat_map([{pk, %Date{calendar: _, day: _, month: _, year: _} = v} | t], acc) do
     to_flat_map(t, Map.put_new(acc, pk, v))
   end
+  defp to_flat_map([{pk, %NaiveDateTime{calendar: _, day: _, hour: _, microsecond: _, minute: _, month: _, second: _, year: _} = v} | t], acc) do
+    to_flat_map(t, Map.put_new(acc, pk, v))
+  end
   defp to_flat_map([{pk, %{} = v} | t], acc) do
     v |> to_list(pk) |> to_flat_map(to_flat_map(t, acc))
   end

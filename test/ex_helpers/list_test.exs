@@ -53,6 +53,20 @@ defmodule ListTest do
                }
              ) == ["a.a", "a.b", "a.c", "b", "c"]
     end
+
+    test "should convert with date inside" do
+      assert hash_to_csv_header_array(
+               %{
+                 "c" => ~D[2018-01-01],
+                 "b" => 2,
+                 "a" => %{
+                   "c" => 1,
+                   "b" => ~N[2018-12-29 06:18:55],
+                   "a" => 3
+                 }
+               }
+             ) == ["a.a", "a.b", "a.c", "b", "c"]
+    end
   end
 
   describe "#hash_to_csv_data_array" do
@@ -60,9 +74,9 @@ defmodule ListTest do
       assert List.hash_to_csv_data_array(%{}, []) == []
     end
     test "should return values list by header with complex keys in header passed" do
-      map = %{"c" => 1, "b" => 2, "a" => %{"c" => 1, "b" => 2, "a" => 3}, "555" => [{1, 2}, {2, 2}]}
+      map = %{"c" => 1, "b" => 2, "a" => %{"c" => ~D[2018-01-01], "b" => ~N[2018-12-29 06:18:55], "a" => 3}, "555" => [{1, 2}, {2, 2}]}
       header = ["a.c", "a.b", "a.p", "c", "1", "555", "no_definition"]
-      assert hash_to_csv_data_array(map, header) == [1, 2, nil, 1, nil, [{1, 2}, {2, 2}], nil]
+      assert hash_to_csv_data_array(map, header) == [~D[2018-01-01], ~N[2018-12-29 06:18:55], nil, 1, nil, [{1, 2}, {2, 2}], nil]
     end
   end
 

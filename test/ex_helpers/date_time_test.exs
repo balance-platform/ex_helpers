@@ -30,4 +30,29 @@ defmodule DateTimeTest do
       assert to_date(~D[2018-01-01]) == ~D[2018-01-01]
     end
   end
+
+  describe "#after_time" do
+    test "should return date later then now by duration" do
+      assert Timex.shift(Timex.now, seconds: 5) <= after_time(5)
+      assert Timex.shift(Timex.now, days: 5) <= after_time(5, :days)
+    end
+    test "should return error if duration or granularity is wrong to use" do
+      assert after_time(0) == {:error, :wrong_duration}
+      assert after_time(-1) == {:error, :wrong_duration}
+      assert after_time("") == {:error, {:invalid_shift, {:seconds, ""}}}
+      assert after_time(1, :ddd) == {:error, {:invalid_shift, {:ddd, 1}}}
+    end
+  end
+  describe "#before_time" do
+    test "should return date sooner then now by duration" do
+      assert Timex.shift(Timex.now, seconds: -5) <= before_time(5)
+      assert Timex.shift(Timex.now, days: -5) <= before_time(5, :days)
+    end
+    test "should return error if duration or granularity is wrong to use" do
+      assert before_time(0) == {:error, :wrong_duration}
+      assert before_time(-1) == {:error, :wrong_duration}
+      assert before_time("") == {:error, {:invalid_shift, {:seconds, ""}}}
+      assert before_time(1, :ddd) == {:error, {:invalid_shift, {:ddd, -1}}}
+    end
+  end
 end

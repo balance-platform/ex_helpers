@@ -1,6 +1,8 @@
 defmodule ExHelpers.DateTime do
   @moduledoc """
-  Currently module contain only one type of functions - convert any given binary to date.
+  Module contain functions to convert any (almost of it, for string patterns take a look at `to_date/1`)
+  date/datetime strings to date and wrappers arount `Timex.shift/2` for shorter shift datetime declaration.
+
   For parsing to date used Timex as most famous date/datetime library.
 
   **TODO: to_datetime functions**
@@ -76,10 +78,67 @@ defmodule ExHelpers.DateTime do
   end
   def to_date(_, _), do: nil
 
+  @doc """
+  take a look at `after_time/2`
+  """
+  @spec after_time(integer) :: DateTime.t() | {:error, any}
+  def after_time(duration), do: after_time(duration, :seconds)
+  @doc """
+  Simple wrapper around `Timex.shift/2`.
+
+  Returns forward shift by `duration` in `granularity`.
+
+  - duration - integer value, > 0
+  - granularity - granularity metric, look at `Timex.Comparable.granularity/0`. `:seconds` by default
+
+  Examples:
+  ```
+  after_time(5) # => 5 secs in future relatively Timex.now
+  after_time(5, :days) # => 5 days in future relatively Timex.now
+  ```
+  """
+  @spec after_time(integer, atom) :: DateTime.t() | {:error, any}
+  def after_time(duration, _) when duration < 1, do: {:error, :wrong_duration}
+  def after_time(duration, granularity), do: Timex.shift(Timex.now, [{granularity, duration}])
+
+  @doc """
+  take a look at `before_time/2`
+  """
+  @spec before_time(integer) :: DateTime.t() | {:error, any}
+  def before_time(duration), do: before_time(duration, :seconds)
+  @doc """
+  Simple wrapper around `Timex.shift/2`.
+
+  Similar to `after_time/2`.
+
+  Returns backward shift by `duration` in `granularity`.
+
+  - duration - integer value, > 0
+  - granularity - granularity metric, look at `Timex.Comparable.granularity/0`. `:seconds` by default
+
+  Examples:
+  ```
+  before_time(5) # => 5 secs in past relatively Timex.now
+  before_time(5, :days) # => 5 days in past relatively Timex.now
+  ```
+  """
+  @spec before_time(integer, atom) :: DateTime.t() | {:error, any}
+  def before_time(duration, _) when duration < 1, do: {:error, :wrong_duration}
+  def before_time(duration, granularity) do
+    case is_integer(duration) do
+      true -> Timex.shift(Timex.now, [{granularity, -duration}])
+      false -> {:error, {:invalid_shift, {granularity, duration}}}
+    end
+  end
+
   defmacro __using__(_opts) do
     quote do
       defdelegate to_date(prop), to: ExHelpers.DateTime
       defdelegate to_date(prop, patterns), to: ExHelpers.DateTime
+      defdelegate after_time(duration), to: ExHelpers.DateTime
+      defdelegate after_time(duration, granularity), to: ExHelpers.DateTime
+      defdelegate before_time(duration), to: ExHelpers.DateTime
+      defdelegate before_time(duration, granularity), to: ExHelpers.DateTime
     end
   end
 end

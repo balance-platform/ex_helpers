@@ -20,6 +20,7 @@ defmodule ExHelpers do
   - [ExHelpers.List](ExHelpers.List.html)
   - [ExHelpers.Map](ExHelpers.Map.html)
   - [ExHelpers.Numeric](ExHelpers.Numeric.html)
+  - [ExHelpers.Functions](ExHelpers.Functions.html)
   """
 
   use ExHelpers.Binary
@@ -27,6 +28,7 @@ defmodule ExHelpers do
   use ExHelpers.List
   use ExHelpers.Map
   use ExHelpers.Numeric
+  use ExHelpers.Functions
 
   defmacro __using__(_opts) do
     quote do
@@ -35,6 +37,7 @@ defmodule ExHelpers do
       use ExHelpers.List
       use ExHelpers.Map
       use ExHelpers.Numeric
+      use ExHelpers.Functions
     end
   end
 end

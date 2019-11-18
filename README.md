@@ -15,7 +15,7 @@ by adding `ex_helpers` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_helpers, "~> 0.1.0"}
+    {:ex_helpers, "~> 0.2.0"}
   ]
 end
 ```
@@ -69,8 +69,11 @@ Currently available modules:
   - [ExHelpers.List](lib/ex_helpers/list.ex)
   - [ExHelpers.Map](lib/ex_helpers/map.ex)
   - [ExHelpers.Numeric](lib/ex_helpers/numeric.ex)
+  - [ExHelpers.Functions](lib/ex_helpers/functions.ex)
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/ex_helpers](https://hexdocs.pm/ex_helpers).
 
+### TODO
+typespecs for functions

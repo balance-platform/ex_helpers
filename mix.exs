@@ -23,6 +23,7 @@ defmodule ExHelpers.MixProject do
     [
       {:ex_doc, ">= 0.18.0", only: :dev, runtime: false},
       {:timex, ">= 3.0.0"},
+      {:memoize, "~> 1.3"},
     ]
   end
 end

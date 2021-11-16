@@ -1,7 +1,7 @@
 defmodule ExHelpers.DateTime do
   @moduledoc """
   Module contain functions to convert any (almost of it, for string patterns take a look at `to_date/1`)
-  date/datetime strings to date and wrappers arount `Timex.shift/2` for shorter shift datetime declaration.
+  date/datetime strings to date and wrappers around `Timex.shift/2` for shorter shift datetime declaration.
 
   For parsing to date used Timex as most famous date/datetime library.
 
@@ -24,6 +24,8 @@ defmodule ExHelpers.DateTime do
   ```
   """
 
+  use Memoize
+
   @patterns [
     "{YYYY}-{M}-{D}T{h24}:{m}:{s}{ss}Z",
     "{YYYY}-{M}-{D}T{h24}:{m}:{s}",
@@ -44,9 +46,15 @@ defmodule ExHelpers.DateTime do
 
   for empty binary, nil, non-matched binary or integer/float return nil
   """
-  def to_date(nil), do: nil
-  def to_date(""), do: nil
-  def to_date(prop), do: to_date(prop, @patterns)
+  defmemo to_date(nil), expires_in: 5 * 60 * 1000 do
+    nil
+  end
+  defmemo to_date(""), expires_in: 5 * 60 * 1000 do
+    nil
+  end
+  defmemo to_date(prop), expires_in: 5 * 60 * 1000 do
+    to_date(prop, @patterns)
+  end
   @doc """
   Parse to date with custom patterns.
 
@@ -60,10 +68,16 @@ defmodule ExHelpers.DateTime do
   to_date(nil, ["{YYYY}{M}{D}{h24}{m}:{s}"]) # => nil
   ```
   """
-  def to_date(nil, _), do: nil
-  def to_date("", _), do: nil
-  def to_date(prop, pattern) when is_binary(pattern), do: to_date(prop, [pattern])
-  def to_date(prop, patterns) when is_list(patterns) do
+  defmemo to_date(nil, _), expires_in: 5 * 60 * 1000 do
+    nil
+  end
+  defmemo to_date("", _), expires_in: 5 * 60 * 1000 do
+    nil
+  end
+  defmemo to_date(prop, pattern) when is_binary(pattern), expires_in: 5 * 60 * 1000 do
+    to_date(prop, [pattern])
+  end
+  defmemo to_date(prop, patterns) when is_list(patterns), expires_in: 5 * 60 * 1000 do
     patterns
     |> Enum.sort
     |> Enum.reverse
@@ -76,7 +90,9 @@ defmodule ExHelpers.DateTime do
     |> Enum.reject(&is_nil/1)
     |> Enum.at(0)
   end
-  def to_date(_, _), do: nil
+  defmemo to_date(_, _), expires_in: 5 * 60 * 1000  do
+    nil
+  end
 
   @doc """
   take a look at `after_time/2`

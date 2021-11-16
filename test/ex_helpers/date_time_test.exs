@@ -39,8 +39,8 @@ defmodule DateTimeTest do
     test "should return error if duration or granularity is wrong to use" do
       assert after_time(0) == {:error, :wrong_duration}
       assert after_time(-1) == {:error, :wrong_duration}
-      assert after_time("") == {:error, {:invalid_shift, {:seconds, ""}}}
-      assert after_time(1, :ddd) == {:error, {:invalid_shift, {:ddd, 1}}}
+      assert after_time("") == {:error, {:unknown_shift_unit, :seconds}}
+      assert after_time(1, :ddd) == {:error, {:unknown_shift_unit, :ddd}}
     end
   end
   describe "#before_time" do
@@ -52,7 +52,7 @@ defmodule DateTimeTest do
       assert before_time(0) == {:error, :wrong_duration}
       assert before_time(-1) == {:error, :wrong_duration}
       assert before_time("") == {:error, {:invalid_shift, {:seconds, ""}}}
-      assert before_time(1, :ddd) == {:error, {:invalid_shift, {:ddd, -1}}}
+      assert before_time(1, :ddd) == {:error, {:unknown_shift_unit, :ddd}}
     end
   end
 end

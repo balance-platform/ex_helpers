@@ -16,7 +16,7 @@ defmodule ExHelpersTest do
   test "should import functions from helpers by import this module" do
     defmodule Foo do
       import ExHelpers
-      def bar(val), do: ExHelpers.to_s(val)
+      def bar(val), do: to_s(val)
     end
     assert Foo.bar(1) == "1"
   end

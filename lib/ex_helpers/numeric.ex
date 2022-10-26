@@ -58,7 +58,7 @@ defmodule ExHelpers.Numeric do
   def to_i(f) when is_float(f), do: round(f)
   def to_i(%Date{calendar: _, day: d, month: m, year: y}), do: d + m * 100 + y * 10_000
   def to_i(%DateTime{day: d, month: m, year: y}), do: d + m * 100 + y * 10_000
-  def to_i(str), do: str |> String.split(".") |> Enum.at(0) |> String.to_integer
+  def to_i(str), do: str |> String.replace(",", ".") |> String.split(".") |> Enum.at(0) |> String.to_integer
 
   @doc """
   Convert any type of value (except list, map and date/datetime) to float

@@ -68,6 +68,8 @@ defmodule ExHelpers.Numeric do
   def to_f(nil), do: 0.0
   def to_f("-"), do: 0.0
   def to_f(prop) when is_binary(prop) do
+    prop = String.replace(prop, ",", ".")
+
     case is_numeric(prop) do
       true -> prop |> Float.parse() |> elem(0)
       false -> 0.0
